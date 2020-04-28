@@ -128,7 +128,7 @@ class KhanMounted(Khan):
         else:
             hits = self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots) + \
                    self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots)
-        return self.shoot_wound(hits, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun), \
+        return self.shoot_wound(hits, self.gun_str, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun), \
                self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
