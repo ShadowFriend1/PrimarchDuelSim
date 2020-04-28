@@ -13,7 +13,7 @@ class Sydek(Primarch):
     a = 4
     ap = 3
     type = 11
-    run = False
+    shoot_hit_mod = -1
 
     def hit(self, hit_mod, e_ws, a):
         if self.run:
