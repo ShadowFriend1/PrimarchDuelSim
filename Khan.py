@@ -48,7 +48,7 @@ class Khan(Primarch):
             else:
                 if roll < self.sv:
                     take.append(N)
-        if take.len() > 0 & sever:
+        if len(take) > 0 & sever:
             roll = random.randint(1, 6) + random.randint(1, 6)
             if roll > self.t:
                 for N in range(random.randint(1, 3)):
@@ -59,7 +59,7 @@ class Khan(Primarch):
                     else:
                         if roll < self.sv:
                             take.append(2)
-        if take.len() > 0 & deflagrate:
+        if len(take) > 0 & deflagrate:
             for N in take:
                 roll = random.randint(1, 6)
                 if N <= self.sv:
@@ -68,11 +68,11 @@ class Khan(Primarch):
                 else:
                     if roll < self.sv:
                         take.append(N)
-        if take.len() > 0 & soul_blaze:
+        if len(take) > 0 & soul_blaze:
             self.soul_blazed += 1
-        self.w_c -= take.len()
+        self.w_c -= len(take)
         dead = self.check_death()
-        if take.len() > 0 & (not dead):
+        if len(take) > 0 & (not dead):
             self.concussed[0] = concussive
             self.concussed[1] = concussive
             if disable:
