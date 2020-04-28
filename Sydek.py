@@ -77,6 +77,7 @@ class SydekAbyss(Sydek):
     gun_str = 8
     shots = 5
     fp_w_gun = True
+    gun_blinding = True
 
 class SydekDriver(Sydek):
 
@@ -85,7 +86,6 @@ class SydekDriver(Sydek):
     gun_str = 6
     shots = 3
     deflagrate = True
-    gun_blinding = True
 
     def shoot(self, shoot_hit_mod, shoot_wound_mod, e_t, fp_t, fp_i, dorn, overwatch):
         hits = 0
