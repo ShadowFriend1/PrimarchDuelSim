@@ -93,7 +93,7 @@ class Alpharius(Primarch):
                     if roll >= hit_c:
                         hits += 1
                     elif roll == 1:
-                        gets_hot.append(7)
+                        gets_hot.append([7, False, roll])
         else:
             hit_c_1 = 2
             hit_c_1 -= shoot_hit_mod
