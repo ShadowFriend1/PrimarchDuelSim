@@ -3,6 +3,7 @@ import random
 from Primarch import Primarch
 
 
+# TODO: implement murderous strike
 class Angron(Primarch):
 
     name = "Angron"
@@ -16,6 +17,8 @@ class Angron(Primarch):
     shots = 1
     gun_ap = 2
     gun_str = 7
+    fnp = 6
+
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
         hits = 0
@@ -63,61 +66,6 @@ class Angron(Primarch):
                     if roll >= hit_c_2:
                         hits += 1
         return hits
-
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
-        roll = random.randint(1, 6)
-        if roll > self.get_initiative() or roll == 6:
-            self.blind[0] = blinding
-            self.blind[1] = blinding
-        take = []
-        for N in wounds:
-            if N == 0:
-                roll = random.randint(1, 6)
-                if roll != 6:
-                    take.append(N)
-            else:
-                roll = random.randint(1, 6)
-                if N <= self.sv:
-                    if roll < self.inv:
-                        roll = random.randint(1, 6)
-                        if roll != 6:
-                            take.append(N)
-                else:
-                    if roll < self.sv:
-                        roll = random.randint(1, 6)
-                        if roll != 6:
-                            take.append(N)
-        if len(take) > 0 & sever:
-            roll = random.randint(1, 6) + random.randint(1, 6)
-            if roll > self.t:
-                for N in range(random.randint(1, 3)):
-                    roll = random.randint(1, 6)
-                    if 2 <= self.sv:
-                        if roll < self.inv:
-                            take.append(2)
-                    else:
-                        if roll < self.sv:
-                            take.append(2)
-        if len(take) > 0 & deflagrate:
-            for N in take:
-                roll = random.randint(1, 6)
-                if N <= self.sv:
-                    if roll < self.inv:
-                        take.append(N)
-                else:
-                    if roll < self.sv:
-                        take.append(N)
-        if len(take) > 0 & soul_blaze:
-            self.soul_blazed += 1
-        self.w_c -= len(take)
-        dead = self.check_death()
-        if len(take) > 0 & (not dead):
-            self.concussed[0] = concussive
-            self.concussed[1] = concussive
-            if disable:
-                self.ws -= 1
-                self.s -= 1
-        return dead
 
 
 class BentAngron(Angron):

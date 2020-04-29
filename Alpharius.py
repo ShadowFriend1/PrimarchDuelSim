@@ -14,6 +14,7 @@ class Alpharius(Primarch):
     gun_str = 7
     gun_ap = 2
     shots = 2
+    instant_d = True
 
     def hit(self, hit_mod, e_ws, a):
         hit_c = 4
@@ -41,17 +42,17 @@ class Alpharius(Primarch):
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & self.fp_w:
+        if fp_t & fp_w:
             wound_c = 6
-        elif self.fp_w:
+        elif fp_w:
             wound_c = 2
-        elif self.s == e_t + 1:
+        elif strength == e_t + 1:
             wound_c = 3
-        elif self.s >= e_t + 2:
+        elif strength >= e_t + 2:
             wound_c = 2
-        elif self.s == e_t - 1:
+        elif strength == e_t - 1:
             wound_c = 5
-        elif self.s <= e_t - 2:
+        elif strength <= e_t - 2:
             wound_c = 6
         if wound_c < 6 & wound_mod < 0:
             wound_c -= wound_mod
@@ -60,15 +61,15 @@ class Alpharius(Primarch):
         if dorn & (wound_c < 3):
             wound_c = 3
         wounds = []
-        if not (fp_i & self.fp_w):
+        if not (fp_i & fp_w):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(self.ap)
+                    wounds.append(ap)
                 elif roll == 1:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(self.ap)
+                        wounds.append(ap)
         return wounds
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
@@ -140,22 +141,22 @@ class Alpharius(Primarch):
                 hits += 1
             elif roll == 1:
                 gets_hot.append(7)
-        self.save(gets_hot, False, False, False, False, True, False, False, False)
+        self.save(gets_hot, False, False, False, False, True, False, False, False, False)
         return hits
 
     def shoot_wound(self, hits: int, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & self.fp_w:
+        if fp_t & fp_w:
             wound_c = 6
-        elif self.fp_w:
+        elif fp_w:
             wound_c = 2
-        elif self.gun_str - wound_mod == e_t + 1:
+        elif strength - wound_mod == e_t + 1:
             wound_c = 3
-        elif self.gun_str - wound_mod >= e_t + 2:
+        elif strength - wound_mod >= e_t + 2:
             wound_c = 2
-        elif self.gun_str - wound_mod == e_t - 1:
+        elif strength - wound_mod == e_t - 1:
             wound_c = 5
-        elif self.gun_str - wound_mod <= e_t - 2:
+        elif strength - wound_mod <= e_t - 2:
             wound_c = 6
         if wound_c < 6 & wound_mod < 0:
             wound_c -= wound_mod

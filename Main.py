@@ -24,13 +24,15 @@ from Vulkan import Vulkan
 def shoot_fight(ff: Primarch, sf: Primarch):
     ff_shoot = ff.shoot(sf.get_shoot_hit_mod(), sf.get_shoot_wound_mod(), sf.get_toughness(),
                         sf.get_fleshbane_tough(), sf.get_fleshbane_immune(), sf.get_dorn(), False)
-    sf_dead = sf.save(ff_shoot[0], ff_shoot[1], ff_shoot[2], False, False, True, False, ff_shoot[3], ff_shoot[4])
+    sf_dead = sf.save(ff_shoot[0], ff_shoot[1], ff_shoot[2], False, False, True, False, ff_shoot[3], ff_shoot[4],
+                      ff_shoot[5])
     if sf_dead:
         # print(ff.get_name()+" wins with: "+str(ff.get_wounds())+" wounds remaining")
         return 1
     sf_shoot = sf.shoot(ff.get_shoot_hit_mod(), ff.get_shoot_wound_mod(), ff.get_toughness(),
                         ff.get_fleshbane_tough(), ff.get_fleshbane_immune(), ff.get_dorn(), True)
-    ff_dead = ff.save(sf_shoot[0], sf_shoot[1], sf_shoot[2], False, False, False, False, sf_shoot[3], sf_shoot[4])
+    ff_dead = ff.save(sf_shoot[0], sf_shoot[1], sf_shoot[2], False, False, False, False, sf_shoot[3], sf_shoot[4],
+                      sf_shoot[5])
     if ff_dead:
         # print(sf.get_name()+" wins with: "+str(sf.get_wounds())+" wounds remaining")
         return 2
@@ -39,7 +41,7 @@ def shoot_fight(ff: Primarch, sf: Primarch):
 
 def impact_fight(ff, sf):
     ff_impact = ff.impact(sf.get_wound_mod(), sf.get_toughness(), sf.get_dorn())
-    sf_dead = sf.save(ff_impact, False, False, False, False, False, False, False, False)
+    sf_dead = sf.save(ff_impact, False, False, False, False, False, False, False, False, False)
     if sf_dead:
         if sf.get_initiative() >= 10:
             sf_fight = sf.fight(ff.get_hit_mod(), ff.get_wound_mod(), ff.get_weapon_skill(), ff.get_toughness(),
@@ -63,14 +65,14 @@ def fight(ff: Primarch, sf: Primarch, simultaneous):
     ff_fight = ff.fight(sf.get_hit_mod(), sf.get_wound_mod(), sf.get_weapon_skill(), sf.get_toughness(),
                         sf.get_fleshbane_tough(), sf.get_fleshbane_immune(), sf.get_initiative(), sf.get_dorn())
     sf_dead = sf.save(ff_fight[0], ff_fight[1], ff_fight[2], ff_fight[3], ff_fight[4], False, ff_fight[5],
-                      False, False)
+                      False, False, ff_fight[6])
     if sf_dead & (not simultaneous):
         # print(ff.get_name()+" wins with: "+str(ff.get_wounds())+" wounds remaining")
         return 1
     sf_fight = sf.fight(ff.get_hit_mod(), ff.get_wound_mod(), ff.get_weapon_skill(), ff.get_toughness(),
                         ff.get_fleshbane_tough(), ff.get_fleshbane_immune(), ff.get_initiative(), ff.get_dorn())
     ff_dead = ff.save(sf_fight[0], sf_fight[1], sf_fight[2], sf_fight[3], sf_fight[4], False, sf_fight[5],
-                      False, False)
+                      False, False, sf_fight[6])
     if sf_dead & ff_dead:
         # print("The fight is a draw with simultaneous deaths")
         return 3
@@ -96,11 +98,13 @@ def servo_fight(ff: Primarch, sf: Primarch):
     if ff.get_servo():
         ff_fight = ff.servo_fight(sf.get_hit_mod(), sf.get_wound_mod(), sf.get_weapon_skill(), sf.get_toughness(),
                                   sf.get_fleshbane_tough(), sf.get_dorn())
-        sf_dead = sf.save(ff_fight[0], ff_fight[1], ff_fight[2], ff_fight[3], ff_fight[4], False, False, False, False)
+        sf_dead = sf.save(ff_fight[0], ff_fight[1], ff_fight[2], ff_fight[3], ff_fight[4], False, False, False, False,
+                          (8 >= sf.get_toughness()))
     if sf.get_servo():
         sf_fight = sf.servo_fight(ff.get_hit_mod(), ff.get_wound_mod(), ff.get_weapon_skill(), ff.get_toughness(),
                                   ff.get_fleshbane_tough(), ff.get_dorn())
-        ff_dead = ff.save(sf_fight[0], sf_fight[1], sf_fight[2], sf_fight[3], sf_fight[4], False, False, False, False)
+        ff_dead = ff.save(sf_fight[0], sf_fight[1], sf_fight[2], sf_fight[3], sf_fight[4], False, False, False, False,
+                          (8 >= sf.get_toughness()))
     if sf_dead & ff_dead:
         # print("The fight is a draw with simultaneous deaths")
         return 3
@@ -188,16 +192,16 @@ if __name__ == "__main__":
                                 finished = shoot_fight(fighter_b, fighter_a)
                                 if finished == 0:
                                     finished = impact_fight(fighter_b, fighter_a)
-                            if (fighter_a.get_asf() & (not fighter_b.get_asf())) & finished == 0:
+                            if (fighter_a.get_asf() & (not fighter_b.get_asf())) & (finished == 0):
                                 finished = fight(fighter_a, fighter_b, False)
                                 final = 1
-                            elif (fighter_b.get_asf() & (not fighter_a.get_asf())) & finished == 0:
+                            elif (fighter_b.get_asf() & (not fighter_a.get_asf())) & (finished == 0):
                                 finished = fight(fighter_b, fighter_a, False)
                                 final = 2
-                            if (fighter_a.get_initiative() > fighter_b.get_initiative()) & finished == 0:
+                            elif (fighter_a.get_initiative() > fighter_b.get_initiative()) & (finished == 0):
                                 finished = fight(fighter_a, fighter_b, False)
                                 final = 1
-                            elif (fighter_a.get_initiative() < fighter_b.get_initiative()) & finished == 0:
+                            elif (fighter_a.get_initiative() < fighter_b.get_initiative()) & (finished == 0):
                                 finished = fight(fighter_b, fighter_a, False)
                                 final = 2
                             elif finished == 0:
@@ -228,8 +232,14 @@ if __name__ == "__main__":
                     x += 1
             for result in result_set:
                 display = result[0] + " " + result[2] + " Against " + result[1]
+                display2 = result[1] + " Draw Against " + result[0]
                 if display in final_results:
                     final_results[display] += 1
+                    if (display2 in final_results) & (result[2] == "Draw"):
+                        final_results[display2] = final_results[display]
+                elif (result[2] == "Draw") & (display2 in final_results):
+                    final_results[display2] += 1
+                    final_results[display] = final_results[display2]
                 else:
                     final_results[display] = 1
     for x in sorted(final_results):

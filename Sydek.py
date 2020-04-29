@@ -4,7 +4,6 @@ from Primarch import Primarch
 
 
 class Sydek(Primarch):
-
     name = "Sydek Akadius"
     ws = 6
     bs = 9
@@ -32,17 +31,17 @@ class Sydek(Primarch):
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & self.fp_w:
+        if fp_t & fp_w:
             wound_c = 6
-        elif self.fp_w:
+        elif fp_w:
             wound_c = 2
-        elif self.s == e_t + 1:
+        elif strength == e_t + 1:
             wound_c = 3
-        elif self.s >= e_t + 2:
+        elif strength >= e_t + 2:
             wound_c = 2
-        elif self.s == e_t - 1:
+        elif strength == e_t - 1:
             wound_c = 5
-        elif self.s <= e_t - 2:
+        elif strength <= e_t - 2:
             wound_c = 6
         if wound_c < 6 & wound_mod < 0:
             wound_c -= wound_mod
@@ -71,7 +70,6 @@ class Sydek(Primarch):
 
 
 class SydekAbyss(Sydek):
-
     name = "Sydek Using Abyss"
     gun_ap = 2
     gun_str = 8
@@ -79,8 +77,8 @@ class SydekAbyss(Sydek):
     fp_w_gun = True
     gun_blinding = True
 
-class SydekDriver(Sydek):
 
+class SydekDriver(Sydek):
     name = "Sydek Using Driver and Chase"
     gun_ap = 3
     gun_str = 6
@@ -92,5 +90,5 @@ class SydekDriver(Sydek):
         if not overwatch:
             hits = 2
         return self.shoot_wound(hits, self.gun_str, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun), \
-               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze
-
+               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze, self.instant_d or \
+               (self.gun_str >= (e_t * 2))

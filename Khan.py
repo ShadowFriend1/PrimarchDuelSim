@@ -31,7 +31,7 @@ class Khan(Primarch):
             hits += super().hit(hit_mod, e_ws, 1)
         return hits
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
         roll = random.randint(1, 6)
         if roll > self.get_initiative() or roll == 6:
             self.blind[0] = blinding
@@ -83,7 +83,7 @@ class Khan(Primarch):
 
 class KhanAfoot(Khan):
     name = "The Khan Afoot"
-    i = 8
+    i = 9
     gun_str = 6
     gun_ap = 3
     shots = 1
@@ -112,7 +112,7 @@ class KhanAfoot(Khan):
 
 class KhanMounted(Khan):
     name = "The Khan Mounted"
-    i = 7
+    i = 8
     t = 7
     gun_str = 5
     gun_ap = 4
@@ -129,7 +129,8 @@ class KhanMounted(Khan):
             hits = self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots) + \
                    self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots)
         return self.shoot_wound(hits, self.gun_str, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun), \
-               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze
+               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze, \
+               (self.gun_str >= (e_t * 2))
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
         hits = 0

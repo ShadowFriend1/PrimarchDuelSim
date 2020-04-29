@@ -41,7 +41,7 @@ class Horus(Primarch):
                     hits += 1
         return hits
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
         roll = random.randint(1, 6)
         if roll > self.get_initiative() or roll == 6:
             roll = random.randint(1, 6)
@@ -114,17 +114,17 @@ class HorusTalon(Horus):
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & self.fp_w:
+        if fp_t & fp_w:
             wound_c = 6
-        elif self.fp_w:
+        elif fp_w:
             wound_c = 2
-        elif self.s == e_t + 1:
+        elif strength == e_t + 1:
             wound_c = 3
-        elif self.s >= e_t + 2:
+        elif strength >= e_t + 2:
             wound_c = 2
-        elif self.s == e_t - 1:
+        elif strength == e_t - 1:
             wound_c = 5
-        elif self.s <= e_t - 2:
+        elif strength <= e_t - 2:
             wound_c = 6
         if wound_c < 6 & wound_mod < 0:
             wound_c -= wound_mod

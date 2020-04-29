@@ -17,6 +17,7 @@ class Mortarion(Primarch):
     gun_ap = 2
     gun_str = 8
     shots = 1
+    instant_d = True
 
     def end_of_turn(self):
         if self.turn // 2 == 0 & self.w_c < self.w:
@@ -41,7 +42,7 @@ class Mortarion(Primarch):
             if roll >= 4:
                 roll = random.randint(1, 3)
                 self.save(self.wound(roll, 4, self.wound_mod, self.t, False, False, self.dorn, 5, False), False, False,
-                          False, False, True, False, False, False)
+                          False, False, True, False, False, False, (8 >= self.get_toughness()))
             else:
                 remove += 1
         self.soul_blazed -= remove

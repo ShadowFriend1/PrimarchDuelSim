@@ -8,6 +8,7 @@ class Leandros(Primarch):
     name = "Leandros Vettias"
     ws = 8
     s = 8
+    s_start = 8
     inv = 3
     type = 2
     shots = 1
@@ -17,10 +18,13 @@ class Leandros(Primarch):
     def get_initiative(self):
         return self.i
 
-    def check_death(self):
-        death = super().check_death()
+    def reset(self, turn):
+        super().reset(turn)
+        self.s = self.s_start
+
+    def end_of_turn(self):
+        super().end_of_turn()
         self.s += 1
-        return death
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
         hits = 0

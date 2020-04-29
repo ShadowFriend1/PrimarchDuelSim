@@ -34,9 +34,9 @@ class Primarch:
     soul_blazed = 0
     deflagrate = False
     concussive = False
-    concussed = [False, True]
+    concussed = []
     blinding = False
-    blind = [False, True]
+    blind = []
     disable = False
     sever = False
     force = False
@@ -46,11 +46,16 @@ class Primarch:
     turn = 1
     servo = False
     run = False
+    instant_d = False
+    fnp = 7
+    reroll_sv = False
 
     def __init__(self):
         self.w_c = self.w
         self.ws_start = self.ws
         self.s_start = self.s
+        self.concussed = [False, False]
+        self.blind = [False, False]
 
     def get_fleshbane_tough(self):
         return self.fp_t
@@ -136,7 +141,8 @@ class Primarch:
         else:
             hits = self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots)
         return self.shoot_wound(hits, self.gun_str, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun), \
-               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze
+               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze, \
+               (self.gun_str >= (e_t * 2))
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
         hits = 0
@@ -204,7 +210,8 @@ class Primarch:
     def fight(self, hit_mod, wound_mod, e_ws, e_t, fp_t, fp_i, e_i, dorn):
         hits = self.hit(hit_mod, e_ws, self.a)
         return self.wound(hits, self.s, wound_mod, e_t, fp_t, fp_i, dorn, self.ap, self.fp_w), \
-               self.concussive, self.blinding & hits > 0, self.disable, self.force, self.sever
+               self.concussive, self.blinding & hits > 0, self.disable, self.force, self.sever, \
+               self.instant_d or (self.s > (2 * e_t))
 
     def servo_fight(self, hit_mod, wound_mod, e_ws, e_t, fp_t, dorn):
         hits = self.hit(hit_mod, e_ws, 1)
@@ -282,7 +289,7 @@ class Primarch:
                     wounds.append(ap)
         return wounds
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
         roll = random.randint(1, 6)
         if roll > self.get_initiative() or roll == 6:
             self.blind[0] = blinding
@@ -295,10 +302,19 @@ class Primarch:
                 roll = random.randint(1, 6)
                 if N <= self.sv:
                     if roll < self.inv:
-                        take.append(N)
+                        if self.reroll_sv:
+                            roll = random.randint(1, 6)
+                            if roll < self.inv:
+                                take.append(N)
+                        else:
+                            take.append(N)
                 else:
                     if roll < self.sv:
                         take.append(N)
+        for N in reversed(take):
+            roll = random.randint(1, 6)
+            if (roll >= self.fnp) & (not instant_d):
+                take.remove(N)
         if len(take) > 0 & sever:
             roll = random.randint(1, 6) + random.randint(1, 6)
             if roll > self.t:
@@ -360,7 +376,7 @@ class Primarch:
             if roll >= 4:
                 roll = random.randint(1, 3)
                 self.save(self.wound(roll, 4, self.wound_mod, self.t, False, False, self.dorn, 5, False), False, False,
-                          False, False, True, False, False, False)
+                          False, False, True, False, False, False, False)
             else:
                 remove += 1
         self.soul_blazed -= remove

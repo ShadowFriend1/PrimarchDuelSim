@@ -3,6 +3,7 @@ import random
 from Primarch import Primarch
 
 
+# TODO: implement murderous strike
 class KonradCurze(Primarch):
 
     name = "Konrad Curze"
@@ -37,17 +38,17 @@ class KonradCurze(Primarch):
 
     def shoot_wound(self, hits: int, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & self.fp_w:
+        if fp_t & fp_w:
             wound_c = 6
-        elif self.fp_w:
+        elif fp_w:
             wound_c = 2
-        elif self.gun_str - wound_mod == e_t + 1:
+        elif strength - wound_mod == e_t + 1:
             wound_c = 3
-        elif self.gun_str - wound_mod >= e_t + 2:
+        elif strength - wound_mod >= e_t + 2:
             wound_c = 2
-        elif self.gun_str - wound_mod == e_t - 1:
+        elif strength - wound_mod == e_t - 1:
             wound_c = 5
-        elif self.gun_str - wound_mod <= e_t - 2:
+        elif strength - wound_mod <= e_t - 2:
             wound_c = 6
         if dorn & (wound_c < 3):
             wound_c = 3
@@ -63,17 +64,17 @@ class KonradCurze(Primarch):
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & self.fp_w:
+        if fp_t & fp_w:
             wound_c = 6
-        elif self.fp_w:
+        elif fp_w:
             wound_c = 2
-        elif self.s == e_t + 1:
+        elif strength == e_t + 1:
             wound_c = 3
-        elif self.s >= e_t + 2:
+        elif strength >= e_t + 2:
             wound_c = 2
-        elif self.s == e_t - 1:
+        elif strength == e_t - 1:
             wound_c = 5
-        elif self.s <= e_t - 2:
+        elif strength <= e_t - 2:
             wound_c = 6
         if wound_c < 6 & wound_mod < 0:
             wound_c -= wound_mod
