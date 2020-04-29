@@ -376,7 +376,7 @@ class Primarch:
             if roll >= 4:
                 roll = random.randint(1, 3)
                 self.save(self.wound(roll, 4, self.wound_mod, self.t, False, False, self.dorn, 5, False), False, False,
-                          False, False, True, False, False, False, False)
+                          False, False, True, False, False, False, (4 >= (self.get_toughness()*2)))
             else:
                 remove += 1
         self.soul_blazed -= remove
