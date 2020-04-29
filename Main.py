@@ -157,13 +157,13 @@ if __name__ == "__main__":
     leandros_shield = LeandrosShield()
     sydek_abyss = SydekAbyss()
     sydek_driver = SydekDriver()
-    # primarchs = [fulgrim_fireblade, fulgrim_laer, rogal_dorn, konrad_curze, ferrus_manus, angron, bent_angron,
-    #              roboute_guilliman_gladius, roboute_guilliman_hand, mortarion, horus_hammer, horus_talon, lorgar,
-    #              lorgar_empowered, vulkan, corax_death, corax_scourge, corax_shadow, alpharius, leman_russ_axe,
-    #              leman_russ_sword, magnus, magnus_endurance, magnus_iron_arm, magnus_warp_speed, magnus_all_biomancy,
-    #              magnus_precognition, sanguinius_spear, sanguinius_encarmine, sanguinius_moonsilver, khan_afoot,
-    #              khan_mounted, lion_sword, lion_wolf, perturabo, pert_hammer, leandros_blade, leandros_shield,
-    #              sydek_abyss, sydek_driver]
+    primarchs = [fulgrim_fireblade, fulgrim_laer, rogal_dorn, konrad_curze, ferrus_manus, angron, bent_angron,
+                 roboute_guilliman_gladius, roboute_guilliman_hand, mortarion, horus_hammer, horus_talon, lorgar,
+                 lorgar_empowered, vulkan, corax_death, corax_scourge, corax_shadow, alpharius, leman_russ_axe,
+                 leman_russ_sword, magnus, magnus_endurance, magnus_iron_arm, magnus_warp_speed, magnus_all_biomancy,
+                 magnus_precognition, sanguinius_spear, sanguinius_encarmine, sanguinius_moonsilver, khan_afoot,
+                 khan_mounted, lion_sword, lion_wolf, perturabo, pert_hammer, leandros_blade, leandros_shield,
+                 sydek_abyss, sydek_driver]
     final_results = {}
     for N in reversed(primarchs):
         fighter_a = N
