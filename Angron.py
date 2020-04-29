@@ -3,7 +3,6 @@ import random
 from Primarch import Primarch
 
 
-# TODO: implement murderous strike
 class Angron(Primarch):
 
     name = "Angron"
@@ -18,6 +17,7 @@ class Angron(Primarch):
     gun_ap = 2
     gun_str = 7
     fnp = 6
+    murderous = 6
 
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):

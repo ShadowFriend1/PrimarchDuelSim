@@ -27,8 +27,7 @@ class Magnus(Primarch):
             hits = self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots)
         self.shots = random.randint(1, 3)
         return self.shoot_wound(hits, self.gun_str, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun),\
-               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze, \
-               (self.gun_str >= (e_t * 2))
+               self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze
 
 
 class MagnusIronArm(Magnus):
@@ -66,9 +65,41 @@ class MagnusPrecognition(Magnus):
     name = "Magnus With Precognition"
     reroll_sv = True
 
+    def shoot_hit(self, bs, shoot_hit_mod, shots):
+        hits = super().shoot_hit(bs, shoot_hit_mod, shots)
+        return hits + super().shoot_hit(bs, shoot_hit_mod, shots - hits)
+
+    def shoot_wound(self, hits: int, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
+        wound_c = 4
+        if fp_t & fp_w:
+            wound_c = 6
+        elif fp_w:
+            wound_c = 2
+        elif strength - wound_mod == e_t + 1:
+            wound_c = 3
+        elif strength - wound_mod >= e_t + 2:
+            wound_c = 2
+        elif strength - wound_mod == e_t - 1:
+            wound_c = 5
+        elif strength - wound_mod <= e_t - 2:
+            wound_c = 6
+        if dorn & (wound_c < 3):
+            wound_c = 3
+        wounds = []
+        if not (fp_i & fp_w):
+            for N in range(hits):
+                roll = random.randint(1, 6)
+                if roll >= wound_c:
+                    wounds.append([ap, (strength >= (e_t * 2)), roll])
+                else:
+                    roll = random.randint(1, 6)
+                    if roll >= wound_c:
+                        wounds.append([ap, (strength >= (e_t * 2)), roll])
+        return wounds
+
     def hit(self, hit_mod, e_ws, a):
         hit_c = 4
-        if self.blind:
+        if self.blind[0]:
             hit_c = 6
         elif self.ws < (e_ws / 2):
             hit_c = 5
@@ -115,9 +146,9 @@ class MagnusPrecognition(Magnus):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
         return wounds

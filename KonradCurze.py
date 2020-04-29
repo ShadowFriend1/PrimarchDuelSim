@@ -3,7 +3,6 @@ import random
 from Primarch import Primarch
 
 
-# TODO: implement murderous strike
 class KonradCurze(Primarch):
 
     name = "Konrad Curze"
@@ -16,6 +15,7 @@ class KonradCurze(Primarch):
     shots = 3
     gun_str = 4
     gun_ap = 5
+    murderous = 6
 
     def impact(self, wound_mod, e_t, dorn):
         wounds = self.wound(random.randint(1, 3), self.s, wound_mod, e_t, False, False, dorn, 7, False)
@@ -57,9 +57,9 @@ class KonradCurze(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll == 6:
-                    wounds.append(0)
+                    wounds.append([0, self.instant_d, roll])
                 elif roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, self.instant_d, roll])
         return wounds
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
@@ -86,11 +86,13 @@ class KonradCurze(Primarch):
         if not (fp_i & fp_w):
             for N in range(hits):
                 roll = random.randint(1, 6)
-                if roll >= wound_c:
-                    wounds.append(ap)
+                if roll >= self.murderous:
+                    wounds.append([ap, True, roll])
+                elif roll >= wound_c:
+                    wounds.append([ap, self.instant_d, roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, self.instant_d, roll])
         return wounds
 

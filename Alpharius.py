@@ -18,7 +18,7 @@ class Alpharius(Primarch):
 
     def hit(self, hit_mod, e_ws, a):
         hit_c = 4
-        if self.blind:
+        if self.blind[0]:
             hit_c = 6
         elif self.ws < (e_ws / 2):
             hit_c = 5
@@ -65,11 +65,11 @@ class Alpharius(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
                 elif roll == 1:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
         return wounds
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
@@ -117,14 +117,14 @@ class Alpharius(Primarch):
                     if roll >= hit_c_1:
                         hits += 1
                     elif roll == 1:
-                        gets_hot.append(7)
+                        gets_hot.append([7, False, roll])
                 else:
                     rerolls += 1
                     roll = random.randint(1, 6)
                     if roll >= hit_c_2:
                         hits += 1
                     elif roll == 1:
-                        gets_hot.append(7)
+                        gets_hot.append([7, False, roll])
         if (hits + rerolls) < shots:
             if bs <= 5:
                 hit_c = 7 - bs
@@ -140,8 +140,8 @@ class Alpharius(Primarch):
             if roll >= hit_c:
                 hits += 1
             elif roll == 1:
-                gets_hot.append(7)
-        self.save(gets_hot, False, False, False, False, True, False, False, False, False)
+                gets_hot.append([7, False, roll])
+        self.save(gets_hot, False, False, False, False, True, False, False, False)
         return hits
 
     def shoot_wound(self, hits: int, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
@@ -169,9 +169,9 @@ class Alpharius(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, (strength >= (e_t * 2)), roll])
                 elif roll == 1:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, (strength >= (e_t * 2)), roll])
         return wounds

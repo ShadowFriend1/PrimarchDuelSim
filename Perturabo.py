@@ -38,9 +38,9 @@ class Perturabo(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll == 6:
-                    wounds.append(2)
+                    wounds.append([ap, (strength >= (e_t * 2)), roll])
                 elif roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, (strength >= (e_t * 2)), roll])
         return wounds
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):

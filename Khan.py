@@ -31,7 +31,7 @@ class Khan(Primarch):
             hits += super().hit(hit_mod, e_ws, 1)
         return hits
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
         roll = random.randint(1, 6)
         if roll > self.get_initiative() or roll == 6:
             self.blind[0] = blinding
@@ -39,10 +39,10 @@ class Khan(Primarch):
         take = []
         for N in wounds:
             roll = random.randint(1, 6)
-            if N <= self.sv & shooting:
+            if N[0] <= self.sv & shooting:
                 if roll < self.inv + 2:
                     take.append(N)
-            elif N <= self.sv:
+            elif N[0] <= self.sv:
                 if roll < self.inv:
                     take.append(N)
             else:
@@ -55,14 +55,14 @@ class Khan(Primarch):
                     roll = random.randint(1, 6)
                     if 2 <= self.sv:
                         if roll < self.inv:
-                            take.append(2)
+                            take.append([2, False, roll])
                     else:
                         if roll < self.sv:
-                            take.append(2)
+                            take.append([2, False, roll])
         if len(take) > 0 & deflagrate:
             for N in take:
                 roll = random.randint(1, 6)
-                if N <= self.sv:
+                if N[0] <= self.sv:
                     if roll < self.inv:
                         take.append(N)
                 else:
@@ -130,7 +130,6 @@ class KhanMounted(Khan):
                    self.shoot_hit(self.get_ballistic_skill(), shoot_hit_mod, self.shots)
         return self.shoot_wound(hits, self.gun_str, shoot_wound_mod, e_t, fp_t, fp_i, dorn, self.gun_ap, self.fp_w_gun), \
                self.gun_concussive, self.gun_blinding & hits > 0, self.deflagrate, self.soul_blaze, \
-               (self.gun_str >= (e_t * 2))
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
         hits = 0

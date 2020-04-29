@@ -36,9 +36,9 @@ class RobouteGuilliman(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll == 6:
-                    wounds.append(2)
+                    wounds.append([2, (strength >= (e_t * 2)), roll])
                 elif roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, (strength >= (e_t * 2)), roll])
         return wounds
 
     def get_initiative(self):
@@ -50,7 +50,7 @@ class RobouteGuilliman(Primarch):
             self.ws += 1
         return death
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
         roll = random.randint(1, 6)
         if roll > self.get_initiative() or roll == 6:
             self.blind[0] = blinding
@@ -62,7 +62,7 @@ class RobouteGuilliman(Primarch):
                 take.append(N)
             else:
                 roll = random.randint(1, 6)
-                if N <= self.sv:
+                if N[0] <= self.sv:
                     if (roll < self.inv) & inv_roll:
                         roll = random.randint(1, 6)
                         if roll < self.inv:
@@ -78,14 +78,14 @@ class RobouteGuilliman(Primarch):
                     roll = random.randint(1, 6)
                     if 2 <= self.sv:
                         if roll < self.inv:
-                            take.append(2)
+                            take.append([2, False, roll])
                     else:
                         if roll < self.sv:
-                            take.append(2)
+                            take.append([2, False, roll])
         if len(take) > 0 & deflagrate:
             for N in take:
                 roll = random.randint(1, 6)
-                if N <= self.sv:
+                if N[0] <= self.sv:
                     if roll < self.inv:
                         take.append(N)
                 else:
@@ -104,12 +104,12 @@ class RobouteGuilliman(Primarch):
         return dead
 
 
-# TODO: implement murderous strike
 class RobouteGuillimanGladius(RobouteGuilliman):
 
     name = "Roboute Guilliman With Gladius"
     s = 7
     ap = 2
+    murderous = 6
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
@@ -135,12 +135,14 @@ class RobouteGuillimanGladius(RobouteGuilliman):
         if not (fp_i & fp_w):
             for N in range(hits):
                 roll = random.randint(1, 6)
-                if roll >= wound_c:
-                    wounds.append(ap)
+                if roll >= self.murderous:
+                    wounds.append([ap, True, roll])
+                elif roll >= wound_c:
+                    wounds.append([ap, self.instant_d, roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, self.instant_d, roll])
         return wounds
 
 

@@ -63,10 +63,10 @@ class Lorgar(Primarch):
                         hits += 1
         return hits
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
         if force:
             self.inv -= 1
-        dead = super().save(wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d)
+        dead = super().save(wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze)
         if force:
             self.inv += 1
         return dead
@@ -125,16 +125,16 @@ class LorgarEmpowered(Lorgar):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, (strength >= (e_t * 2)), roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, (strength >= (e_t * 2)), roll])
         return wounds
 
     def hit(self, hit_mod, e_ws, a):
         hit_c = 4
-        if self.blind:
+        if self.blind[0]:
             hit_c = 6
         elif self.ws < (e_ws / 2):
             hit_c = 5
@@ -181,17 +181,17 @@ class LorgarEmpowered(Lorgar):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(ap)
+                        wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
         return wounds
 
-    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d):
+    def save(self, wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze):
         if force:
             self.inv -= 1
-        dead = super().save(wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze, instant_d)
+        dead = super().save(wounds, concussive, blinding, disable, force, shooting, sever, deflagrate, soul_blaze)
         if force:
             self.inv += 1
         return dead

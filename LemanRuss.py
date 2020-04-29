@@ -37,9 +37,9 @@ class LemanRuss(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll == 6:
-                    wounds.append(2)
+                    wounds.append([2, self.instant_d, roll])
                 elif roll >= wound_c:
-                    wounds.append(ap)
+                    wounds.append([ap, self.instant_d, roll])
         return wounds
 
 
@@ -74,11 +74,11 @@ class LemanRussBalenight(LemanRuss):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll >= wound_c:
-                    wounds.append(self.ap)
+                    wounds.append([ap, self.instant_d, roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append(self.ap)
+                        wounds.append([ap, self.instant_d, roll])
         return wounds
 
 

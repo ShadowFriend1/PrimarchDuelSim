@@ -24,15 +24,13 @@ from Vulkan import Vulkan
 def shoot_fight(ff: Primarch, sf: Primarch):
     ff_shoot = ff.shoot(sf.get_shoot_hit_mod(), sf.get_shoot_wound_mod(), sf.get_toughness(),
                         sf.get_fleshbane_tough(), sf.get_fleshbane_immune(), sf.get_dorn(), False)
-    sf_dead = sf.save(ff_shoot[0], ff_shoot[1], ff_shoot[2], False, False, True, False, ff_shoot[3], ff_shoot[4],
-                      ff_shoot[5])
+    sf_dead = sf.save(ff_shoot[0], ff_shoot[1], ff_shoot[2], False, False, True, False, ff_shoot[3], ff_shoot[4])
     if sf_dead:
         # print(ff.get_name()+" wins with: "+str(ff.get_wounds())+" wounds remaining")
         return 1
     sf_shoot = sf.shoot(ff.get_shoot_hit_mod(), ff.get_shoot_wound_mod(), ff.get_toughness(),
                         ff.get_fleshbane_tough(), ff.get_fleshbane_immune(), ff.get_dorn(), True)
-    ff_dead = ff.save(sf_shoot[0], sf_shoot[1], sf_shoot[2], False, False, False, False, sf_shoot[3], sf_shoot[4],
-                      sf_shoot[5])
+    ff_dead = ff.save(sf_shoot[0], sf_shoot[1], sf_shoot[2], False, False, False, False, sf_shoot[3], sf_shoot[4])
     if ff_dead:
         # print(sf.get_name()+" wins with: "+str(sf.get_wounds())+" wounds remaining")
         return 2
@@ -41,7 +39,7 @@ def shoot_fight(ff: Primarch, sf: Primarch):
 
 def impact_fight(ff, sf):
     ff_impact = ff.impact(sf.get_wound_mod(), sf.get_toughness(), sf.get_dorn())
-    sf_dead = sf.save(ff_impact, False, False, False, False, False, False, False, False, False)
+    sf_dead = sf.save(ff_impact, False, False, False, False, False, False, False, False)
     if sf_dead:
         if sf.get_initiative() >= 10:
             sf_fight = sf.fight(ff.get_hit_mod(), ff.get_wound_mod(), ff.get_weapon_skill(), ff.get_toughness(),
@@ -65,25 +63,26 @@ def fight(ff: Primarch, sf: Primarch, simultaneous):
     ff_fight = ff.fight(sf.get_hit_mod(), sf.get_wound_mod(), sf.get_weapon_skill(), sf.get_toughness(),
                         sf.get_fleshbane_tough(), sf.get_fleshbane_immune(), sf.get_initiative(), sf.get_dorn())
     sf_dead = sf.save(ff_fight[0], ff_fight[1], ff_fight[2], ff_fight[3], ff_fight[4], False, ff_fight[5],
-                      False, False, ff_fight[6])
+                      False, False)
     if sf_dead & (not simultaneous):
         # print(ff.get_name()+" wins with: "+str(ff.get_wounds())+" wounds remaining")
         return 1
     sf_fight = sf.fight(ff.get_hit_mod(), ff.get_wound_mod(), ff.get_weapon_skill(), ff.get_toughness(),
                         ff.get_fleshbane_tough(), ff.get_fleshbane_immune(), ff.get_initiative(), ff.get_dorn())
     ff_dead = ff.save(sf_fight[0], sf_fight[1], sf_fight[2], sf_fight[3], sf_fight[4], False, sf_fight[5],
-                      False, False, sf_fight[6])
+                      False, False)
     if sf_dead & ff_dead:
         # print("The fight is a draw with simultaneous deaths")
         return 3
     elif ff_dead:
-        if simultaneous & ff.get_initiative() == 1 & servo_fight(ff, sf) == 3:
+        if (sf.get_initiative() == 1) & (servo_fight(ff, sf) == 3):
+            print(3)
             # print("The fight is a draw with simultaneous deaths")
             return 3
         # print(sf.get_name()+" wins with: "+str(sf.get_wounds())+" wounds remaining")
         return 2
     elif sf_dead:
-        if simultaneous & ff.get_initiative() == 1 & servo_fight(ff, sf) == 3:
+        if (simultaneous & (ff.get_initiative() == 1)) & (servo_fight(ff, sf) == 3):
             # print("The fight is a draw with simultaneous deaths")
             return 3
         # print(ff.get_name()+" wins with: "+str(ff.get_wounds())+" wounds remaining")
@@ -97,14 +96,12 @@ def servo_fight(ff: Primarch, sf: Primarch):
     sf_dead = False
     if ff.get_servo():
         ff_fight = ff.servo_fight(sf.get_hit_mod(), sf.get_wound_mod(), sf.get_weapon_skill(), sf.get_toughness(),
-                                  sf.get_fleshbane_tough(), sf.get_dorn())
-        sf_dead = sf.save(ff_fight[0], ff_fight[1], ff_fight[2], ff_fight[3], ff_fight[4], False, False, False, False,
-                          (8 >= sf.get_toughness()))
+                                  sf.get_dorn())
+        sf_dead = sf.save(ff_fight[0], ff_fight[1], ff_fight[2], ff_fight[3], ff_fight[4], False, False, False, False)
     if sf.get_servo():
         sf_fight = sf.servo_fight(ff.get_hit_mod(), ff.get_wound_mod(), ff.get_weapon_skill(), ff.get_toughness(),
-                                  ff.get_fleshbane_tough(), ff.get_dorn())
-        ff_dead = ff.save(sf_fight[0], sf_fight[1], sf_fight[2], sf_fight[3], sf_fight[4], False, False, False, False,
-                          (8 >= sf.get_toughness()))
+                                  ff.get_dorn())
+        ff_dead = ff.save(sf_fight[0], sf_fight[1], sf_fight[2], sf_fight[3], sf_fight[4], False, False, False, False)
     if sf_dead & ff_dead:
         # print("The fight is a draw with simultaneous deaths")
         return 3
@@ -160,13 +157,13 @@ if __name__ == "__main__":
     leandros_shield = LeandrosShield()
     sydek_abyss = SydekAbyss()
     sydek_driver = SydekDriver()
-    primarchs = [fulgrim_fireblade, fulgrim_laer, rogal_dorn, konrad_curze, ferrus_manus, angron, bent_angron,
-                 roboute_guilliman_gladius, roboute_guilliman_hand, mortarion, horus_hammer, horus_talon, lorgar,
-                 lorgar_empowered, vulkan, corax_death, corax_scourge, corax_shadow, alpharius, leman_russ_axe,
-                 leman_russ_sword, magnus, magnus_endurance, magnus_iron_arm, magnus_warp_speed, magnus_all_biomancy,
-                 magnus_precognition, sanguinius_spear, sanguinius_encarmine, sanguinius_moonsilver, khan_afoot,
-                 khan_mounted, lion_sword, lion_wolf, perturabo, pert_hammer, leandros_blade, leandros_shield,
-                 sydek_abyss, sydek_driver]
+    # primarchs = [fulgrim_fireblade, fulgrim_laer, rogal_dorn, konrad_curze, ferrus_manus, angron, bent_angron,
+    #              roboute_guilliman_gladius, roboute_guilliman_hand, mortarion, horus_hammer, horus_talon, lorgar,
+    #              lorgar_empowered, vulkan, corax_death, corax_scourge, corax_shadow, alpharius, leman_russ_axe,
+    #              leman_russ_sword, magnus, magnus_endurance, magnus_iron_arm, magnus_warp_speed, magnus_all_biomancy,
+    #              magnus_precognition, sanguinius_spear, sanguinius_encarmine, sanguinius_moonsilver, khan_afoot,
+    #              khan_mounted, lion_sword, lion_wolf, perturabo, pert_hammer, leandros_blade, leandros_shield,
+    #              sydek_abyss, sydek_driver]
     final_results = {}
     for N in reversed(primarchs):
         fighter_a = N
