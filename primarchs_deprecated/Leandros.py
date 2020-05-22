@@ -1,24 +1,30 @@
 import random
 
-from Primarch import Primarch
+from primarchs_deprecated.Primarch import Primarch
 
 
-class Angron(Primarch):
+class Leandros(Primarch):
 
-    name = "Angron"
-    ws = 9
+    name = "Leandros Vettias"
+    ws = 8
     s = 8
-    i = 7
-    a = 6
-    ap = 2
-    sv = 3
-    type = 12
+    s_start = 8
+    inv = 3
+    type = 2
     shots = 1
-    gun_ap = 2
-    gun_str = 7
-    fnp = 6
-    murderous = 6
+    gun_ap = 3
+    gun_str = 6
 
+    def get_initiative(self):
+        return self.i
+
+    def reset(self, turn):
+        super().reset(turn)
+        self.s = self.s_start
+
+    def end_of_turn(self):
+        super().end_of_turn()
+        self.s += 1
 
     def shoot_hit(self, bs, shoot_hit_mod, shots):
         hits = 0
@@ -68,7 +74,14 @@ class Angron(Primarch):
         return hits
 
 
-class BentAngron(Angron):
+class LeandrosBlade(Leandros):
 
-    name = "Angron With Extra Attack"
-    a = 7
+    name = "Leandros With The Blade of Lycetta"
+    ap = 1
+
+
+class LeandrosShield(Leandros):
+
+    name = "Leandros With The Shield of Pontia"
+    ap = 2
+    concussive = True

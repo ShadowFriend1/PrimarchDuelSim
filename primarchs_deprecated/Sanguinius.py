@@ -1,6 +1,6 @@
 import random
 
-from Primarch import Primarch
+from primarchs_deprecated.Primarch import Primarch
 
 
 class Sanguinius(Primarch):

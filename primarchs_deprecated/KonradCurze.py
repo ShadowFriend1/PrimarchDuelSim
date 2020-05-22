@@ -1,20 +1,40 @@
 import random
 
-from Primarch import Primarch
+from primarchs_deprecated.Primarch import Primarch
 
 
-class RogalDorn(Primarch):
+class KonradCurze(Primarch):
 
-    name = "Rogal Dorn"
-    i = 4
+    name = "Konrad Curze"
     ws = 8
-    a = 4
-    type = 7
-    dorn = True
+    bs = 6
+    i = 7
     ap = 2
-    shots = 5
-    gun_ap = 4
-    gun_str = 5
+    type = 8
+    a = 6
+    shots = 3
+    gun_str = 4
+    gun_ap = 5
+    murderous = 6
+
+    def impact(self, wound_mod, e_t, dorn):
+        wounds = self.wound(random.randint(1, 3), self.s, wound_mod, e_t, False, False, dorn, 7, False)
+        return wounds
+
+    def hit(self, hit_mod, e_ws, a):
+        if self.run:
+            return super().hit(hit_mod, e_ws, a + 1)
+        else:
+            return super().hit(hit_mod, e_ws, a)
+
+    def end_of_turn(self):
+        if self.turn // 2:
+            roll = random.randint(1, 6)
+            if (roll <= self.get_initiative()) & (roll != 6):
+                self.run = True
+        else:
+            self.run = False
+        super().end_of_turn()
 
     def shoot_wound(self, hits: int, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
@@ -37,9 +57,9 @@ class RogalDorn(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll == 6:
-                    wounds.append([2, (strength >= (e_t * 2)), roll])
+                    wounds.append([0, self.instant_d, roll])
                 elif roll >= wound_c:
-                    wounds.append([ap, (strength >= (e_t * 2)), roll])
+                    wounds.append([ap, self.instant_d, roll])
         return wounds
 
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
@@ -66,11 +86,13 @@ class RogalDorn(Primarch):
         if not (fp_i & fp_w):
             for N in range(hits):
                 roll = random.randint(1, 6)
-                if roll >= wound_c:
-                    wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
+                if roll >= self.murderous:
+                    wounds.append([ap, True, roll])
+                elif roll >= wound_c:
+                    wounds.append([ap, self.instant_d, roll])
                 else:
                     roll = random.randint(1, 6)
                     if roll >= wound_c:
-                        wounds.append([ap, self.instant_d or (strength >= (e_t * 2)), roll])
+                        wounds.append([ap, self.instant_d, roll])
         return wounds
 

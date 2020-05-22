@@ -1,40 +1,20 @@
 import random
 
-from Primarch import Primarch
+from primarchs_deprecated.Primarch import Primarch
 
 
-class KonradCurze(Primarch):
+class LemanRuss(Primarch):
 
-    name = "Konrad Curze"
-    ws = 8
+    ws = 9
     bs = 6
     i = 7
-    ap = 2
-    type = 8
     a = 6
+    hit_mod = -1
+    name = "Leman Russ"
+    type = 6
     shots = 3
     gun_str = 4
-    gun_ap = 5
-    murderous = 6
-
-    def impact(self, wound_mod, e_t, dorn):
-        wounds = self.wound(random.randint(1, 3), self.s, wound_mod, e_t, False, False, dorn, 7, False)
-        return wounds
-
-    def hit(self, hit_mod, e_ws, a):
-        if self.run:
-            return super().hit(hit_mod, e_ws, a + 1)
-        else:
-            return super().hit(hit_mod, e_ws, a)
-
-    def end_of_turn(self):
-        if self.turn // 2:
-            roll = random.randint(1, 6)
-            if (roll <= self.get_initiative()) & (roll != 6):
-                self.run = True
-        else:
-            self.run = False
-        super().end_of_turn()
+    gun_ap = 3
 
     def shoot_wound(self, hits: int, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
@@ -57,24 +37,31 @@ class KonradCurze(Primarch):
             for N in range(hits):
                 roll = random.randint(1, 6)
                 if roll == 6:
-                    wounds.append([0, self.instant_d, roll])
+                    wounds.append([2, self.instant_d, roll])
                 elif roll >= wound_c:
                     wounds.append([ap, self.instant_d, roll])
         return wounds
 
+
+class LemanRussBalenight(LemanRuss):
+
+    name = "Leman Russ With The Sword of Balenight"
+    ap = 2
+    sever = True
+
     def wound(self, hits, strength, wound_mod, e_t, fp_t, fp_i, dorn, ap, fp_w):
         wound_c = 4
-        if fp_t & fp_w:
+        if fp_t & self.fp_w:
             wound_c = 6
-        elif fp_w:
+        elif self.fp_w:
             wound_c = 2
-        elif strength == e_t + 1:
+        elif self.s == e_t + 1:
             wound_c = 3
-        elif strength >= e_t + 2:
+        elif self.s >= e_t + 2:
             wound_c = 2
-        elif strength == e_t - 1:
+        elif self.s == e_t - 1:
             wound_c = 5
-        elif strength <= e_t - 2:
+        elif self.s <= e_t - 2:
             wound_c = 6
         if wound_c < 6 & wound_mod < 0:
             wound_c -= wound_mod
@@ -83,12 +70,10 @@ class KonradCurze(Primarch):
         if dorn & (wound_c < 3):
             wound_c = 3
         wounds = []
-        if not (fp_i & fp_w):
+        if not (fp_i & self.fp_w):
             for N in range(hits):
                 roll = random.randint(1, 6)
-                if roll >= self.murderous:
-                    wounds.append([ap, True, roll])
-                elif roll >= wound_c:
+                if roll >= wound_c:
                     wounds.append([ap, self.instant_d, roll])
                 else:
                     roll = random.randint(1, 6)
@@ -96,3 +81,15 @@ class KonradCurze(Primarch):
                         wounds.append([ap, self.instant_d, roll])
         return wounds
 
+
+class LemanRussHelwinter(LemanRuss):
+
+    name = "Leman Russ With The Axe of Helwinter"
+    s = 8
+    ap = 2
+
+    def hit(self, hit_mod, e_ws, a):
+        hits = super().hit(hit_mod, e_ws, a)
+        if hits < self.a:
+            hits += super().hit(hit_mod, e_ws, 1)
+        return hits
