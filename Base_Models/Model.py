@@ -6,7 +6,7 @@ class Model:
     it_will_not_die = False
     character = False
     fear = False
-    adamantium_will = False
+    adamantium_will = 0
     master_of_the_legion = False
     precision_shots = False
     re_roll_all_hit_shoot: bool = False

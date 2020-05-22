@@ -35,8 +35,16 @@ class PlayerTurn:
         self.check_dead()
 
     def psychic(self):
+        psychic_pool_1 = Roll(1).get_roll()[0]
+        psychic_pool_2 = psychic_pool_1
         for n in self.player_1:
-            pass
+            psychic_pool_1 += n.brotherhood_of_psykers
+            for x in n.get_models():
+                psychic_pool_1 += x.psychic_mastery
+        for n in self.player_2:
+            psychic_pool_2 += n.brotherhood_of_psykers
+            for x in n.get_models():
+                psychic_pool_2 += x.psychic_mastery
         self.check_dead()
 
     def shoot(self):

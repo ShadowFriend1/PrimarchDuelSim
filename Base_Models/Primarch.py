@@ -7,7 +7,7 @@ class FootPrimarch(Infantry):
     independent_character = True
     fearless = True
     fear = True
-    adamantium_will = True
+    adamantium_will = 1
     fleet = True
     master_of_the_legion = True
     precision_shots = True
