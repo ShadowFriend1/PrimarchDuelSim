@@ -7,3 +7,6 @@ class Unit:
 
     def __init__(self, models: List[Model]):
         self.models = models
+
+    def get_models(self):
+        return self.models

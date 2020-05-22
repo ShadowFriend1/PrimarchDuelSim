@@ -1,5 +1,6 @@
 class Model:
     ballistic_skill: int = 0
+    it_will_not_die = False
     re_roll_all_hit_shoot: bool = False
     re_roll_all_wound_shoot: bool = False
     re_roll_all_hit_combat: bool = False
@@ -8,3 +9,9 @@ class Model:
     re_roll_num_wound_shoot: int = 0
     re_roll_num_hit_combat: int = 0
     re_roll_num_wound_combat: int = 0
+
+    def check_death(self):
+        pass
+
+    def add_hp(self):
+        pass
