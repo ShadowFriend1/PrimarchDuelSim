@@ -1,5 +1,8 @@
 class Model:
     ballistic_skill: int = 0
+    psychic_mastery = 0
+    accessible_lore = []
+    psychic_powers = []
     it_will_not_die = False
     re_roll_all_hit_shoot: bool = False
     re_roll_all_wound_shoot: bool = False
