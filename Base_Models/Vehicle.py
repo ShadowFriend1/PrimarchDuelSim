@@ -1,3 +1,4 @@
+from Base_Models.Fighter import Fighter
 from Base_Models.Model import Model
 
 
@@ -20,3 +21,7 @@ class Vehicle(Model):
     def add_hp(self):
         if self.hull_points < self.max_hull_points:
             self.hull_points += 1
+
+
+class Walker(Vehicle, Fighter):
+    pass

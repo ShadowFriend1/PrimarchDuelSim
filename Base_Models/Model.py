@@ -4,14 +4,18 @@ class Model:
     accessible_lore = []
     psychic_powers = []
     it_will_not_die = False
+    character = False
+    fear = False
+    adamantium_will = False
+    master_of_the_legion = False
+    precision_shots = False
     re_roll_all_hit_shoot: bool = False
     re_roll_all_wound_shoot: bool = False
-    re_roll_all_hit_combat: bool = False
-    re_roll_all_wound_combat: bool = False
     re_roll_num_hit_shoot: int = 0
     re_roll_num_wound_shoot: int = 0
-    re_roll_num_hit_combat: int = 0
-    re_roll_num_wound_combat: int = 0
+    bulky = False
+    very_bulky = False
+    extremely_bulky = False
 
     def check_death(self):
         pass

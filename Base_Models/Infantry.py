@@ -10,6 +10,8 @@ class Infantry(Fighter):
     invulnerable_save: int = 7
     feel_no_pain: int = 7
     eternal_warrior = False
+    fearless = False
+    independent_character = False
 
     def __init__(self):
         self.wounds = self.max_wounds
@@ -23,3 +25,7 @@ class Infantry(Fighter):
     def add_hp(self):
         if self.wounds < self.max_wounds:
             self.wounds += 1
+
+
+class JumpInfantry(Infantry):
+    bulky = True

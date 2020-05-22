@@ -1,6 +1,18 @@
+from random import random
 from typing import List
+
 from Base_Models.Unit import Unit
-from Turns.Roll import Roll
+
+
+class Roll:
+    roll = []
+
+    def __init__(self, num):
+        for n in range(num):
+            self.roll.append(random.randint(1, 6))
+
+    def get_roll(self):
+        return self.roll
 
 
 class PlayerTurn:
@@ -76,3 +88,34 @@ class PlayerTurn:
             return 2
         else:
             return 0
+
+
+class GameRound:
+
+    player_1_turn: PlayerTurn
+    player_2_turn: PlayerTurn
+    game_end: int
+
+    def __init__(self, player_1: List[Unit], player_2: List[Unit]):
+        player_1_turn = PlayerTurn(player_1, player_2)
+        player_2_turn = PlayerTurn(player_2, player_1)
+        player_1_turn.start()
+        self.game_end = player_1_turn.end_of_turn()
+        if self.game_end == 0:
+            player_2_turn.start()
+            self.game_end = player_2_turn.end_of_turn()
+
+
+class Game:
+
+    game_end = 0
+
+    def __init__(self, player_1: List[Unit], player_2: List[Unit], turn_limit: int = 0):
+        if turn_limit != 0:
+            while (turn_limit > 0) & (self.game_end == 0):
+                game_round = GameRound(player_1, player_2)
+                self.game_end = game_round.game_end
+        else:
+            while self.game_end == 0:
+                game_round = GameRound(player_1, player_2)
+                self.game_end = game_round.game_end
