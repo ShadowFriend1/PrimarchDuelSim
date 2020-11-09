@@ -32,18 +32,21 @@ pipeline {
 				sh 'export PULL_REQ_NUMBER=$CHANGE_ID'
 				withSonarQubeEnv('My SonarQube Server') {
             		sh 'export SONARQUBEURL=$SONAR_HOST_URL/'
+					sh 'printenv'
 				}
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'my-sonarqube-server-login',
 								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 					sh 'export SONARQUBEUSER=$USERNAME'
 					sh 'export SONARQUBEPASSWORD=$PASSWORD'
+					sh 'printenv'
  				}
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aab572d0-f1d3-4f9b-b930-812bcb49d485',
 								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 					sh 'export OWNER=$USERNAME'
 					sh 'export GITHUB_API_KEY=$PASSWORD'
+					sh 'printenv'
  				}
-				withEnv(["GOROOT=${goInstallation}", "PATH+GO=${goInstallation}/bin"]) {
+				withEnv(['GOROOT=${goInstallation}', 'PATH+GO=${goInstallation}/bin']) {
 					sh 'printenv'
 					sh 'go run new.go'
 				}
