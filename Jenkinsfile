@@ -26,6 +26,8 @@ pipeline {
 			environment {
 				goInstallation = tool 'Go:latest'
 				SONARQUBEPROJECT = 'my:project'
+				REPO = 'PrimarchDuelSim'
+				PULL_REQ_NUMBER=CHANGE_ID
 			}
 			steps {
 				withSonarQubeEnv('My SonarQube Server') {
@@ -38,6 +40,7 @@ pipeline {
  				}
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aab572d0-f1d3-4f9b-b930-812bcb49d485',
 								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+					sh 'export OWNER=$USERNAME'
 					sh 'export GITHUB_API_KEY=$PASSWORD'
  				}
 				withEnv(["GOROOT=${Go:latest}", "PATH+GO=${Go:latest}/bin"]) {
