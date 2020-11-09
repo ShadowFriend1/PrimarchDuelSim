@@ -31,7 +31,7 @@ pipeline {
 			steps {
 				sh 'export PULL_REQ_NUMBER=$CHANGE_ID'
 				withSonarQubeEnv('My SonarQube Server') {
-            		sh 'export SONARQUBEURL=$SONAR_HOST_URL'
+            		sh 'export SONARQUBEURL=$SONAR_HOST_URL/'
 				}
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'my-sonarqube-server-login',
 								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
