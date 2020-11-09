@@ -29,7 +29,7 @@ pipeline {
 				REPO = 'PrimarchDuelSim'
 			}
 			steps {
-				sh 'export PULL_REQ_NUMBER = $CHANGE_ID'
+				sh 'export PULL_REQ_NUMBER=$CHANGE_ID'
 				withSonarQubeEnv('My SonarQube Server') {
             		sh 'export SONARQUBEURL=$SONAR_HOST_URL'
 				}
