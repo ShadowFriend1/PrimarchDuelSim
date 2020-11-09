@@ -27,7 +27,7 @@ pipeline {
 				goInstallation = tool 'Go:latest'
 				SONARQUBEPROJECT = 'my:project'
 				REPO = 'PrimarchDuelSim'
-				PULL_REQ_NUMBER=CHANGE_ID
+				PULL_REQ_NUMBER = env.CHANGE_ID
 			}
 			steps {
 				withSonarQubeEnv('My SonarQube Server') {
