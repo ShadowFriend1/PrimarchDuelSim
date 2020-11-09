@@ -27,9 +27,9 @@ pipeline {
 				goInstallation = tool 'Go:latest'
 				SONARQUBEPROJECT = 'my:project'
 				REPO = 'PrimarchDuelSim'
-				PULL_REQ_NUMBER = env.CHANGE_ID
 			}
 			steps {
+				sh 'export PULL_REQ_NUMBER = $CHANGE_ID'
 				withSonarQubeEnv('My SonarQube Server') {
             		sh 'export SONARQUBEURL=$SONAR_HOST_URL'
 				}
