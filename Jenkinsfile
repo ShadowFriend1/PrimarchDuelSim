@@ -22,7 +22,7 @@ pipeline {
 				withSonarQubeEnv('My SonarQube Server') {
             		SONARQUBEURL = env.SONAR_HOST_URL
 				}
-				SONARQUBEPROJECT = my:project
+				SONARQUBEPROJECT = 'my:project'
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'my-sonarqube-server-login',
 								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 					SONARQUBEUSER = USERNAME
