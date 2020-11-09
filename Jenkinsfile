@@ -34,9 +34,6 @@ pipeline {
 				GITHUBAPILOGIN = credentials('aab572d0-f1d3-4f9b-b930-812bcb49d485')
 				OWNER = "${env.GITHUBAPILOGIN_USR}"
 				GITHUB_API_KEY = "${env.GITHUBAPILOGIN_PSW}"
-				SONARQUBEURL = withSonarQubeEnv('My SonarQube Server') {
-					 sh (returnStdout: true, script: "echo ${env.SONAR_HOST_URL}/").trim() 
-				}
 			}
 			steps {
 				withEnv(["GOROOT=${goInstallation}", "PATH+GO=${goInstallation}/bin"]) {
