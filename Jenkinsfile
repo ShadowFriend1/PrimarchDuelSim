@@ -12,6 +12,9 @@ pipeline {
         	}
 		}
 		stage('Checkout Git Comment Program') {
+			when {
+				changeRequest()
+			}
 			steps {
 				git credentialsId: '33be1895-4822-4709-9977-56ae072efd6f', url: 'https://github.com/ShadowFriend1/pr-Decoration.git'
 			}
