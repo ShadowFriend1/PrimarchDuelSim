@@ -27,23 +27,18 @@ pipeline {
 				goInstallation = tool 'Go:latest'
 				SONARQUBEPROJECT = 'my:project'
 				REPO = 'PrimarchDuelSim'
+				SONARQUBESERVERLOGIN = credentials('my-sonarqube-server-login')
+				PULL_REQ_NUMBER = "${env.CHANGE_ID}"
+				SONARQUBEUSER = "${env.SONARQUBESERVERLOGIN_USR}"
+				SONARQUBEPASSWORD = "${env.SONARQUBESERVERLOGIN_PSW}"
+				GITHUBAPILOGIN = credentials('aab572d0-f1d3-4f9b-b930-812bcb49d485')
+				OWNER = "${env.GITHUBAPILOGIN_USR}"
+				GITHUB_API_KEY = "${env.GITHUBAPILOGIN_PSW}"
+				SONARQUBEURL = 'http://devtest-sonar1.fyre.ibm.com:9000/'
 			}
 			steps {
-				sh 'export PULL_REQ_NUMBER=$CHANGE_ID'
-				withSonarQubeEnv('My SonarQube Server') {
-            		sh 'export SONARQUBEURL=$SONAR_HOST_URL/'
-				}
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'my-sonarqube-server-login',
-								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-					sh 'export SONARQUBEUSER=$USERNAME'
-					sh 'export SONARQUBEPASSWORD=$PASSWORD'
- 				}
-				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aab572d0-f1d3-4f9b-b930-812bcb49d485',
-								usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-					sh 'export OWNER=$USERNAME'
-					sh 'export GITHUB_API_KEY=$PASSWORD'
- 				}
 				withEnv(["GOROOT=${goInstallation}", "PATH+GO=${goInstallation}/bin"]) {
+					sh 'printenv'
 					sh 'go run new.go'
 				}
 			}
