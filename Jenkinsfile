@@ -40,6 +40,7 @@ pipeline {
 			}
 			steps {
 				withEnv(["GOROOT=${goInstallation}", "PATH+GO=${goInstallation}/bin"]) {
+					sh 'printenv'
 					sh 'go run new.go'
 				}
 			}
