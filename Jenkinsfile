@@ -20,6 +20,9 @@ pipeline {
 			}
 		}
 		stage('Post Pull Request Comment') {
+			when {
+				changeRequest()
+			}
 			environment {
 				goInstallation = tool 'Go:latest'
 				SONARQUBEPROJECT = 'my:project'
