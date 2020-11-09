@@ -44,6 +44,7 @@ pipeline {
 					sh 'export GITHUB_API_KEY=$PASSWORD'
  				}
 				withEnv(["GOROOT=${goInstallation}", "PATH+GO=${goInstallation}/bin"]) {
+					sh 'printenv'
 					sh 'go run new.go'
 				}
 			}
