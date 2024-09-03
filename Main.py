@@ -1,24 +1,24 @@
-from Alpharius import Alpharius
-from Angron import Angron, BentAngron
-from Corax import CoraxDeath, CoraxScourge, CoraxShadow
-from FerrusManus import FerrusManus
-from Fulgrim import FulgrimLaer, FulgrimFireblade
-from Horus import HorusWorldBreaker, HorusTalon
-from Khan import KhanAfoot, KhanMounted
-from KonradCurze import KonradCurze
-from Leandros import LeandrosBlade, LeandrosShield
-from LemanRuss import LemanRussBalenight, LemanRussHelwinter
-from Lion import LionWolf, LionSword
-from Lorgar import Lorgar, LorgarEmpowered
-from Magnus import Magnus, MagnusIronArm, MagnusEndurance, MagnusWarpSpeed, MagnusAllBiomancy, MagnusPrecognition
-from Mortarion import Mortarion
-from Perturabo import Perturabo, PerturaboHammer
-from Primarch import Primarch
-from RobouteGuilliman import RobouteGuillimanHand, RobouteGuillimanGladius
-from RogalDorn import RogalDorn
-from Sanguinius import SanguiniusBlade, SanguiniusSpear, SanguiniusMoonsilver
-from Sydek import SydekAbyss, SydekDriver
-from Vulkan import Vulkan
+from Units.HQ.Primarchs.Alpharius import Alpharius
+from Units.HQ.Primarchs.Angron import Angron, BentAngron
+from Units.HQ.Primarchs.Corax import CoraxDeath, CoraxScourge, CoraxShadow
+from Units.HQ.Primarchs.FerrusManus import FerrusManus
+from Units.HQ.Primarchs.Fulgrim import FulgrimLaer, FulgrimFireblade
+from Units.HQ.Primarchs.Horus import HorusWorldBreaker, HorusTalon
+from Units.HQ.Primarchs.Khan import KhanAfoot, KhanMounted
+from Units.HQ.Primarchs.KonradCurze import KonradCurze
+from Units.HQ.Primarchs.Leandros import LeandrosBlade, LeandrosShield
+from Units.HQ.Primarchs.LemanRuss import LemanRussBalenight, LemanRussHelwinter
+from Units.HQ.Primarchs.Lion import LionWolf, LionSword
+from Units.HQ.Primarchs.Lorgar import Lorgar, LorgarEmpowered
+from Units.HQ.Primarchs.Magnus import Magnus, MagnusIronArm, MagnusEndurance, MagnusWarpSpeed, MagnusAllBiomancy, MagnusPrecognition
+from Units.HQ.Primarchs.Mortarion import Mortarion
+from Units.HQ.Primarchs.Perturabo import Perturabo, PerturaboHammer
+from Units.HQ.Primarchs.Primarch import Primarch
+from Units.HQ.Primarchs.RobouteGuilliman import RobouteGuillimanHand, RobouteGuillimanGladius
+from Units.HQ.Primarchs.RogalDorn import RogalDorn
+from Units.HQ.Primarchs.Sanguinius import SanguiniusBlade, SanguiniusSpear, SanguiniusMoonsilver
+from Units.HQ.Primarchs.Sydek import SydekAbyss, SydekDriver
+from Units.HQ.Primarchs.Vulkan import Vulkan
 
 
 def shoot_fight(ff: Primarch, sf: Primarch):
